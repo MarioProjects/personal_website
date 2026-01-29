@@ -2,11 +2,10 @@
 import Card from "./Card/index.astro";
 import Button from "./Button.astro";
 import { LINKS } from "../lib/constants";
-/*
-https://www.astroicon.dev/guides/customization/
-https://icon-sets.iconify.design/mdi/
-*/
-import { Icon } from 'astro-icon/components'
+import Github from "./icons/Github.astro";
+import Linkedin from "./icons/Linkedin.astro";
+import Aidventure from "./icons/Aidventure.astro";
+import Kaggle from "./icons/Kaggle.astro";
 import { Image } from "astro:assets";
 ---
 
@@ -22,25 +21,27 @@ import { Image } from "astro:assets";
       <div class="flex gap-4">
         <a href={LINKS.github} aria-label="github profile" target="_blank">
           <Button aria-label="github profile">
-            <Icon size={24} name="mdi:github" class="h-6 transition text-gray-500 hover:text-primary-500" />
+            <Github class="h-6 w-6 transition text-gray-500 hover:text-primary-500" />
             <span class="sr-only">GitHub Profile</span>
           </Button>
         </a>
         <a href={LINKS.linkedin} aria-label="linkeding profile" target="_blank">
           <Button aria-label="linkedin profile">
-            <Icon size={24} name="mdi:linkedin" class="h-6 transition text-gray-500 hover:text-primary-500" />
+            <Linkedin class="h-6 w-6 transition text-gray-500 hover:text-primary-500" />
             <span class="sr-only">Linkedin Profile</span>
           </Button>
         </a>
         <a href={LINKS.aidventure} aria-label="dribble profile" target="_blank">
           <Button aria-label="dribble profile">
-            <Icon size={24} name="mdi:backpack-outline" class="h-6 transition text-gray-500 hover:text-primary-500" />
+            <Aidventure class="h-6 w-6 transition text-gray-500 hover:text-primary-500" />
             <span class="sr-only">Aidventure Blog</span>
           </Button>
         </a>
         <a href={LINKS.kaggle} aria-label="dribble profile" target="_blank">
           <Button aria-label="dribble profile">
-            <Icon size={12} name="fa-brands:kaggle" class="h-6 transition text-gray-500 hover:text-primary-500" />
+            <span class="h-6 w-6 flex items-center justify-center">
+            <Kaggle class="h-5 w-5 transition text-gray-500 hover:text-primary-500" />
+          </span>
             <span class="sr-only">Kaggle Profile</span>
           </Button>
         </a>
