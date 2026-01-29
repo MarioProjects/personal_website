@@ -9,6 +9,12 @@ import { Icon } from "astro-icon/components";
   import { loaderAnimation } from "../lib/constants";
   const cards = document.querySelectorAll(".card");
 
+  // Set initial state for cards to avoid jump
+  cards.forEach(card => {
+    card.style.opacity = "0";
+    card.style.transform = "translateY(40%)";
+  });
+
   const sequence = [
     loaderAnimation,
     [
@@ -24,6 +30,20 @@ import { Icon } from "astro-icon/components";
   ];
 
   timeline(sequence as TimelineDefinition);
+
+  const backToTopButton = document.getElementById("back-to-top");
+
+  backToTopButton?.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      backToTopButton?.classList.remove("hidden");
+    } else {
+      backToTopButton?.classList.add("hidden");
+    }
+  });
 </script>
 
 <Layout
@@ -74,5 +94,12 @@ import { Icon } from "astro-icon/components";
         url="https://agro.maparla.es"
       />
     </div>
+    <button
+      id="back-to-top"
+      class="fixed bottom-8 right-8 bg-neutral-900 text-white p-3 rounded-full shadow-lg hover:bg-neutral-800 transition-colors duration-200 z-50 hidden border border-neutral-600"
+      aria-label="Back to Top"
+    >
+      <Icon name="mdi:arrow-up" class="h-6 w-6" />
+    </button>
   </main>
 </Layout>
