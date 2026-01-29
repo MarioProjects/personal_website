@@ -9,12 +9,6 @@ import { Icon } from "astro-icon/components";
   import { loaderAnimation } from "../lib/constants";
   const cards = document.querySelectorAll(".card");
 
-  // Set initial state for cards to avoid jump
-  cards.forEach(card => {
-    card.style.opacity = "0";
-    card.style.transform = "translateY(40%)";
-  });
-
   const sequence = [
     loaderAnimation,
     [
