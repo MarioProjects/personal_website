@@ -11,7 +11,8 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 
 # Install pnpm
-RUN npm install -g pnpm
+# Pinned: pnpm >=11 errors on unapproved build scripts (ERR_PNPM_IGNORED_BUILDS)
+RUN npm install -g pnpm@10.28.0
 
 # Install dependencies
 RUN pnpm install
