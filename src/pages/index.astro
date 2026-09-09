@@ -7,37 +7,48 @@ import Stats from "../components/Stats.astro";
 import TimeZone from "../components/TimeZoneCard.astro";
 import AboutMe from "../components/AboutMe.astro";
 import Now from "../components/Now.astro";
-import ThemeSlider from "../components/ThemeSlider.astro";
 ---
 
 <script>
   import { stagger, spring, timeline, type TimelineDefinition } from "motion";
   import { loaderAnimation } from "../lib/constants";
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const cards = document.querySelectorAll(".card");
 
-  const sequence = [
-    loaderAnimation,
-    [
-      cards,
-      { y: ["40%", "0%"], opacity: [0, 1] },
-      {
-        at: "-0.1",
-        duration: 0.4,
-        delay: stagger(0.3),
-        easing: spring({ velocity: 100, stiffness: 50, damping: 10 }),
-      },
-    ],
-  ];
+  const sequence: TimelineDefinition = reduceMotion
+    ? [loaderAnimation as any]
+    : [
+        loaderAnimation as any,
+        [
+          cards,
+          { y: ["40%", "0%"], opacity: [0, 1] },
+          {
+            at: "-0.1",
+            duration: 0.4,
+            delay: stagger(0.1),
+            easing: spring({ velocity: 100, stiffness: 50, damping: 10 }),
+          },
+        ],
+      ];
 
-  timeline(sequence as TimelineDefinition);
+  timeline(sequence);
 </script>
 
 <Layout
   title="Mario Parreño - Machine Learning Engineer"
-  description="I'm a Machine Learning engineer specializing in Computer Vision and Generative AI, automating problems that save companies time and money. Currently, I'm focused on tackling real-world problems with Deep Learning."
+  description="Senior Machine Learning Engineer specializing in Agentic AI, RAG and Computer Vision. I design scalable AI architectures and autonomous systems that solve real-world problems."
 >
+  <!--
+    Layout by breakpoint:
+    - base: single column, cards stack.
+    - md:   two columns (tablets, small laptops), rows size to content, dense packing so no gaps are left.
+    - xl:   the 4x8 bento grid. Rows size to content (never clip) and stretch to fill
+            the minimum height when there is room, so the board still fills the screen.
+    The top padding below xl reserves a band for the fixed theme toggle.
+  -->
   <main
-    class="m-auto p-2 grid gap-2 max-w-6xl overflow-hidden relative w-full sm:p-4 sm:gap-2 md:grid-cols-2 md:gap-3 md:p-6 lg:h-screen lg:grid-rows-8 lg:grid-cols-4 lg:gap-4 lg:max-h-[var(--max-portfolio-height)]"
+    class="relative m-auto w-full max-w-6xl grid grid-cols-1 gap-3 p-3 pt-16 sm:gap-4 sm:p-4 sm:pt-16 md:grid-cols-2 md:grid-flow-row-dense md:p-6 md:pt-16 xl:grid-cols-4 xl:grid-rows-[repeat(8,auto)] xl:min-h-[min(88vh,900px)] xl:pt-6"
   >
     <IntroCard />
     <AboutMe />
@@ -46,41 +57,18 @@ import ThemeSlider from "../components/ThemeSlider.astro";
     <Now />
     <Card
       colSpan="md:col-span-1"
-      rowSpan="md:row-span-1"
+      rowSpan="xl:row-span-1"
       title="Personal Projects"
+      body="Code, write-ups and live demos."
       href="/projects"
-    >
-    </Card>
-    
-    <!--<CV />-->
+    />
     <Card
-      colSpan="md:col-span-1" rowSpan="md:row-span-2"
+      colSpan="md:col-span-1"
+      rowSpan="xl:row-span-2"
       title="CV"
       document="/mario_resume.pdf"
-      body="Do you still want my resume? Click anywhere in this box to download it. Do not hesitate to contact me if you have any questions."
-    >
-    </Card>
-    
+      body="Want the full picture? Click anywhere on this card to open my resume as a PDF. Do not hesitate to contact me if you have any questions."
+    />
     <TimeZone />
-    
   </main>
 </Layout>
-
-
-<style>
-  :root {
-    --max-portfolio-height: min(90vh, 800px);
-  }
-
-  @media (min-width: 1024px) and (max-height: 800px) {
-    :root {
-      --max-portfolio-height: 800px;
-    }
-  }
-
-  @media (min-width: 1024px) and (min-height: 1000px) {
-    :root {
-      --max-portfolio-height: 900px;
-    }
-  }
-</style>

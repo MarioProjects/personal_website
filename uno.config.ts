@@ -1,9 +1,9 @@
 // uno.config.ts
-import { defineConfig, presetUno, presetWebFonts } from "unocss";
+import { defineConfig, presetUno } from "unocss";
 
 export default defineConfig({
   content: {
-    filesystem: ["**/*.{html,js,ts,jsx,tsx,vue,svelte,astro}"],
+    filesystem: ["src/**/*.{astro,html,js,ts,jsx,tsx,vue,svelte}"],
   },
   theme: {
     boxShadow: {
@@ -11,13 +11,9 @@ export default defineConfig({
       "custom-hover": `1px 1px 0`,
     },
     fontFamily: {
-      sans: ["CabinetGrotesk", "Satoshi"],
-    },
-    gridTemplateRows: {
-      "auto-250": "repeat(auto-fill, 250px)",
-    },
-    gridTemplateColumns: {
-      "4-minmax": "repeat(4, minmax(150px, 1fr))",
+      // Both families are self-hosted from /public/fonts (see BasicLayout.astro).
+      sans: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+      heading: "CabinetGrotesk, Satoshi, ui-sans-serif, system-ui, sans-serif",
     },
     colors: {
       gray: {
@@ -34,37 +30,30 @@ export default defineConfig({
       },
       darkslate: {
         50: "#f7f7f7",
-        100: "#e3e3e3",
+        100: "rgba(var(--border))" /* Card / button borders, theme aware */,
         200: "#c9c9c9",
         300: "#6b6b6b",
         400: "#383838",
-        500: "rgba(var(--boxes))" /* Exactly your example for the background */,
+        500: "rgba(var(--boxes))" /* Card background, theme aware */,
         600: "#141414",
         700: "#111111",
         800: "#0e0e0e",
-        900: "#0b0b0b" /* Deeper and darker */,
+        900: "#0b0b0b",
       },
       primary: {
         100: "#F9CDD3",
         200: "#F3A3AA",
         300: "#EC7981",
         400: "#E64F59",
-        500: "rgba(var(--accent))", /* Color accent */
+        500: "rgba(var(--accent))" /* Accent colour, theme aware */,
         600: "#CF2F3D",
         700: "#B82534",
         800: "#A01B2B",
         900: "#891321",
       },
+      muted: "rgba(var(--texts-muted))" /* Secondary text, theme aware */,
+      page: "rgba(var(--background))" /* Page background, theme aware */,
     },
   },
-  presets: [
-    presetUno(),
-    presetWebFonts({
-      provider: "fontshare",
-      fonts: {
-        sans: ["Cabinet Grotesk", "Satoshi"],
-        serif: "Zodiak",
-      },
-    }),
-  ],
+  presets: [presetUno()],
 });

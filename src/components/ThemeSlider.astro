@@ -1,71 +1,35 @@
 ---
 import { Icon } from "astro-icon/components";
-
-const { id } = Astro.props;
 ---
 
 <button
-  class="theme-toggle"
+  id="theme-toggle"
+  class="fixed top-3 right-3 sm:top-4 sm:right-4 z-60 flex h-10 w-10 items-center justify-center rounded-full border border-darkslate-100 bg-darkslate-500 shadow-md transition-colors duration-200 hover:border-primary-500 hover:text-primary-500"
   type="button"
-  title="Toggle theme"
-  aria-label="Toggle theme"
-  onclick="togglePreference()"
-  id={id}
+  title="Toggle light / dark theme"
+  aria-label="Toggle light / dark theme"
 >
-  <Icon
-    size={36}
-    name="mdi:white-balance-sunny"
-    class="text-black"
-    id="light-on"
-  />
-  <Icon size={36} name="mdi:moon-and-stars" class="text-white" id="light-off" />
+  <Icon size={20} name="mdi:white-balance-sunny" id="light-on" aria-hidden="true" />
+  <Icon size={20} name="mdi:moon-and-stars" id="light-off" aria-hidden="true" />
 </button>
 
-<style>
-  button {
-    position: absolute;
-    top: 1.75em;
-    right: 2.25em;
-    z-index: 1000;
+<style is:global>
+  /* Icon visibility is driven purely by the theme attribute set in <head>. */
+  :root[data-theme="dark"] #light-on {
+    display: none;
   }
-  @media (max-width: 640px) {
-    button {
-      top: 1em;
-      right: 1em;
-    }
+  :root:not([data-theme="dark"]) #light-off {
+    display: none;
   }
 </style>
 
 <script>
-  // Add event listener to the button
-  const button = document.querySelector(".theme-toggle");
-  const lightOn = document.getElementById("light-on");
-  const lightOff = document.getElementById("light-off");
-
-  /* light vs dark */
-  const colorMode = getColorPreference();
-  // Update the button icon
-  /* If light then hide #light-off else hide #light-on */
-  if (colorMode === "light") {
-    lightOff!.style.display = "none";
-    lightOn!.style.display = "block";
-  } else {
-    lightOn!.style.display = "none";
-    lightOff!.style.display = "block";
+  declare global {
+    interface Window {
+      togglePreference: () => void;
+    }
   }
-
-  if (button !== null && lightOn !== null && lightOff !== null) {
-    button.addEventListener("click", () => {
-      const colorMode = getColorPreference();
-      // Update the button icon
-      /* If light then hide #light-off else hide #light-on */
-      if (colorMode === "light") {
-        lightOff.style.display = "none";
-        lightOn.style.display = "block";
-      } else {
-        lightOn.style.display = "none";
-        lightOff.style.display = "block";
-      }
-    });
-  }
+  document
+    .getElementById("theme-toggle")
+    ?.addEventListener("click", () => window.togglePreference());
 </script>

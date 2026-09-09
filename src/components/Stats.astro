@@ -1,24 +1,29 @@
 ---
 import Card from "./Card/index.astro";
+
+const stats = [
+  { value: "8+", label: "Years experience" },
+  { value: "10+", label: "Certificates" },
+];
 ---
 
-<Card colSpan="lg:col-span-2" rowSpan="md:row-span-2" title="My Stats">
-  <div class="flex flex-col sm:flex-row w-full mt-3">
-    <div class="flex w-full sm:w-1/2">
-      <p class="text-sm">
-        Top Kaggle Expert and published researcher. I turn complex challenges into practical, high-impact AI solutions.
-      </p>
-    </div>
-    <div class="flex flex-col w-full sm:w-1/2 text-right mt-2 sm:mt-0">
-      <h2 class="text-2xl font-bold m-0 z-20">
-        ~7
-        <span class="text-primary-500">Years Experience</span>
-      </h2>
-
-      <h2 class="text-2xl font-bold m-0 z-20 mt-2">
-        +10
-        <span class="text-primary-500">Certificates</span>
-      </h2>
-    </div>
+<Card colSpan="md:col-span-2" rowSpan="xl:row-span-2" title="My Stats">
+  <div class="mt-3 flex h-full w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm leading-relaxed sm:max-w-[55%]">
+      Top Kaggle Expert and published researcher. I turn complex challenges into practical,
+      high-impact AI solutions.
+    </p>
+    <dl class="flex gap-8 sm:justify-end">
+      {
+        stats.map((stat) => (
+          <div class="flex flex-col">
+            <dd class="m-0 text-3xl font-bold leading-none tabular-nums">
+              {stat.value.replace("+", "")}<span class="text-primary-500">+</span>
+            </dd>
+            <dt class="mt-1 text-xs uppercase tracking-wide text-muted">{stat.label}</dt>
+          </div>
+        ))
+      }
+    </dl>
   </div>
 </Card>

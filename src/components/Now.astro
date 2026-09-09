@@ -3,12 +3,13 @@ import Card from "./Card/index.astro";
 import Pulse from "./Pulse.astro";
 ---
 
-<Card colSpan="md:col-span-1" rowSpan="md:row-span-2">
+<Card colSpan="md:col-span-1" rowSpan="xl:row-span-2">
   <div class="flex justify-between w-full items-start mb-2">
-    <div class="flex flex-col">
-      <h2 class="text-xl font-bold m-0 z-20">Now</h2>
-    </div>
+    <h2 class="text-xl font-bold m-0 z-20">Now</h2>
     <Pulse />
   </div>
-  <p class="text-sm">Architecting <b>Agentic AI</b> systems at Newfire. Building autonomous workflows with <b>LangGraph</b> to automate talent discovery.</p>
+  <p class="text-sm leading-relaxed">
+    Building production <b>AI systems</b> at <b>Sword Health</b>, helping scale AI-powered digital
+    physical care with <b>LLMs</b> and agentic workflows.
+  </p>
 </Card>

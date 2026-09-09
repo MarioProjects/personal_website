@@ -2,21 +2,25 @@
 import Card from "./Card/index.astro";
 ---
 
-<Card colSpan="md:col-span-1" rowSpan="md:row-span-6" title="About me">
-  <div class="flex flex-col gap-2">
-    <p class="text-sm font-light">
-      I turn complex research into production-grade AI. With a strong background in <b>Computer Vision</b> and <b>NLP</b>, I now focus on building <b>Agentic Systems</b> and <b>Generative AI</b> solutions.
+<Card colSpan="md:col-span-1" rowSpan="xl:row-span-6" title="About me">
+  <div class="mt-1 flex flex-col gap-2 text-sm leading-normal">
+    <p>
+      I turn complex research into production-grade AI. With a strong background in
+      <b>Computer Vision</b> and <b>NLP</b>, I now focus on building <b>Agentic Systems</b> and
+      <b>Generative AI</b> solutions.
     </p>
-    <p class="text-sm font-light">
-      Beyond code, I focus on architecture and impact. I have engineered multi-agent workflows and hybrid retrieval systems that solve ambiguous problems, prioritizing observability and reliability in production.
+    <p>
+      Beyond code, I focus on architecture and impact. I have engineered multi-agent workflows and
+      hybrid retrieval systems that solve ambiguous problems, prioritizing observability and
+      reliability in production.
     </p>
-    <ul class="list-disc list-inside text-sm font-light">
+    <ul class="list-disc list-outside pl-4 marker:text-primary-500">
       <li>Architected autonomous multi-agent systems using LangGraph.</li>
       <li>Led a 20-person MLOps team for large-scale data initiatives.</li>
       <li>Optimized RAG pipelines reducing latency by 10x.</li>
       <li>Ranked Top 3% Kaggle Expert.</li>
     </ul>
-    <p class="text-sm font-light">
+    <p class="text-muted">
       My stack: PyTorch, LangChain, LangGraph, FastAPI, Docker.
     </p>
   </div>

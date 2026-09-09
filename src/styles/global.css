@@ -1,7 +1,12 @@
+:root,
 :root[data-theme="light"] {
+  color-scheme: light;
+
   --boxes: 244, 244, 244;
   --accent: 81, 115, 181;
   --texts: 0, 0, 0;
+  --texts-muted: 82, 82, 91;
+  --border: 220, 220, 220;
   --buttons-bg: 245, 245, 245;
   --buttons-icon: 33, 33, 33;
 
@@ -11,13 +16,36 @@
 }
 
 :root[data-theme="dark"] {
+  color-scheme: dark;
+
   --boxes: 23, 23, 23;
   --accent: 102, 153, 204;
   --texts: 255, 255, 255;
+  --texts-muted: 161, 161, 170;
+  --border: 51, 51, 51;
   --buttons-bg: 23, 23, 23;
   --buttons-icon: 245, 245, 245;
 
   --background: 12, 12, 15;
   --background-backdrop-init: rgba(3, 3, 12, 0) 1%;
   --background-backdrop-end: rgba(3, 3, 12, 0.95) 75%;
+}
+
+/* Keyboard users get a visible, accent-coloured focus ring; mouse users don't. */
+:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Honour the OS "reduce motion" setting: keep state changes, drop the choreography. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -1,38 +1,65 @@
 ---
 import Card from "./Card/index.astro";
-import { LINKS } from "../lib/constants";
+
+// Most recent first. `current` marks the entry highlighted on the timeline.
+const experience = [
+  {
+    role: "Senior Machine Learning Engineer",
+    company: "Sword Health",
+    url: "https://swordhealth.com/",
+    period: "2026 – Present",
+    current: true,
+  },
+  {
+    role: "Senior Machine Learning Engineer",
+    company: "Newfire",
+    url: "https://www.newfireglobal.com/",
+    period: "2024 – 2026",
+  },
+  {
+    role: "Senior Data Scientist",
+    company: "Cognizant",
+    url: "https://www.cognizant.com/",
+    period: "2022 – 2024",
+  },
+  {
+    role: "ML Engineer",
+    company: "Solver IA",
+    url: "https://iasolver.es/",
+    period: "2022 – 2023",
+  },
+];
 ---
 
-<Card colSpan="md:col-span-1" rowSpan="md:row-span-4">
-  <div class="h-full">
-    <header class="flex items-center">
-      <h1 class="text-xl font-bold">
-        Experience
-      </h1>
-    </header>
-    <div class="mt-3 space-y-2">
-      <div>
-        <h3 class="text-lg font-semibold">Senior Machine Learning Engineer</h3>
-        <a class="text-sm text-primary-500" href="https://www.newfireglobal.com//">Newfire</a>
-        <p class="text-sm text-gray-500"> 2024 - Current </p>
-      </div>
-      <div>
-        <h3 class="text-lg font-semibold">Senior Data Scientist</h3>
-        <a class="text-sm text-primary-500" href="https://www.cognizant.com/">Cognizant</a>
-        <p class="text-sm text-gray-500"> 2022 - 2024 </p>
-      </div>
-      <div>
-        <h3 class="text-lg font-semibold">ML Engineer</h3>
-        <a class="text-sm text-primary-500" href="https://iasolver.es/"> Solver IA </a>
-        <p class="text-sm text-gray-500"> 2022 - 2023 </p>
-      </div>
-      <!-- 
-      <div>
-        <h3 class="text-lg font-semibold">ML Researcher</h3>
-        <a class="text-sm text-primary-500" href="https://www.upv.es/"> UPV </a>
-        <p class="text-sm text-gray-500"> 2018 - 2022 </p>
-      </div>
-      -->
-    </div>
-  </div>
+<Card colSpan="md:col-span-1" rowSpan="xl:row-span-4">
+  <h2 class="text-xl font-bold m-0">Experience</h2>
+  <ol class="relative mt-4 flex flex-col gap-3 border-l border-darkslate-100 pl-4">
+    {
+      experience.map((job) => (
+        <li class="relative">
+          <span
+            class={`absolute left-[-22px] top-1.5 h-3 w-3 rounded-full border-2 border-darkslate-500 ${
+              job.current ? "bg-primary-500" : "bg-muted"
+            }`}
+            aria-hidden="true"
+          />
+          <h3 class="text-base font-semibold leading-snug">
+            {job.role}
+          </h3>
+          <p class="mt-0.5 text-xs text-muted">
+            <a
+              class="text-sm text-primary-500 hover:underline"
+              href={job.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {job.company}
+            </a>
+            <span aria-hidden="true"> · </span>
+            <span>{job.period}</span>
+          </p>
+        </li>
+      ))
+    }
+  </ol>
 </Card>

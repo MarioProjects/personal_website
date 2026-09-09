@@ -1,15 +1,40 @@
 ---
+/**
+ * Square icon button. Renders an <a> when `href` is given (external, new tab),
+ * otherwise a <button>. Never nest one inside a link: that is invalid HTML and
+ * confuses screen readers.
+ */
 interface Props {
+  href?: string;
+  label: string;
   rounded?: boolean;
+  class?: string;
 }
 
-const { rounded } = Astro.props;
+const { href, label, rounded, class: className = "" } = Astro.props;
+const Tag = href ? "a" : "button";
+
+const classes = [
+  "custom-btn inline-flex h-12 w-12 items-center justify-center",
+  "bg-gray-900 text-gray-500 border border-primary-500",
+  "shadow-custom shadow-primary-500",
+  "hover:text-primary-500 transition-colors duration-150 ease-in-out",
+  "active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transform",
+  rounded ? "rounded-full" : "rounded-lg",
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
 ---
 
-<button
-  class={`custom-btn text-xl max-h-[50px] shadow-custom shadow-primary-500 active:shadow-none active:translate-x-[3px] active:translate-y-[3px] text-gray-200 px-5 py-2 border border-primary-500 hover:text-primary-500 transition-colors duration-100 ease-in-out bg-gray-900 cursor-pointer ${
-    rounded ? "rounded-full" : "rounded-lg"
-  }`}
+<Tag
+  href={href}
+  target={href ? "_blank" : undefined}
+  rel={href ? "noopener noreferrer" : undefined}
+  type={href ? undefined : "button"}
+  aria-label={label}
+  title={label}
+  class={classes}
 >
   <slot />
-</button>
+</Tag>

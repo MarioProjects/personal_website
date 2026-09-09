@@ -2,21 +2,11 @@
 interface Props {
   title: string;
   description: string;
-  page?: "travel" | "blog";
-  slug?: string | undefined;
-  frontmatter?: {
-    file: string;
-    url: string | undefined;
-  } & {
-    title: string;
-    description: string;
-    pubDate: string;
-    minutesRead: string;
-  };
 }
 
-const { title, description, page, slug, frontmatter } = Astro.props;
-const image = `${Astro.url.origin}/og-image-dark.png`;
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const image = new URL("/og-image-dark.png", Astro.site ?? Astro.url.origin).href;
 
 const schema = {
   "@context": "http://schema.org",
@@ -29,15 +19,11 @@ const schema = {
     "https://huggingface.co/marioparreno",
   ],
   image: "https://maparla.es/og-image-dark.png",
-  jobTitle: "Machine Learning Engineer",
+  jobTitle: "Senior Machine Learning Engineer",
   worksFor: {
     "@type": "Organization",
-    name: "Self-Employed",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Spain",
-      addressCountry: "ES",
-    },
+    name: "Sword Health",
+    url: "https://swordhealth.com/",
   },
   nationality: {
     "@type": "Country",
@@ -52,36 +38,68 @@ import "../../src/styles/global.css";
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="/favicon/sitemap-index.xml" />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0c0c0f" />
     <!-- Basic OG tags for sharing your website's content on platforms like Facebook and LinkedIn -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url.origin} />
-    <meta
-      property="og:image"
-      content={image || "https://maparla.es/og-image-dark.png"}
-    />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
     <!-- Basic Twitter Card tags -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta
-      name="twitter:image"
-      content={image || "https://maparla.es/og-image-dark.png"}
-    />
+    <meta name="twitter:image" content={image} />
 
-    <link rel="preconnect" href="https://cdn.fontshare.com" />
+    <!-- Self-hosted fonts: preload so headings and body text don't flash a fallback face -->
+    <link rel="preload" href="/fonts/Satoshi-Variable.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/CabinetGrotesk-Variable.ttf" as="font" type="font/ttf" crossorigin />
+
+    <!--
+      Theme bootstrap. Runs synchronously before the body paints so the stored (or OS)
+      preference is applied on first render, with no flash of the wrong theme.
+    -->
+    <script is:inline>
+      (() => {
+        const storageKey = "theme-preference";
+        const themeColors = { light: "#dad1d1", dark: "#0c0c0f" };
+
+        const getColorPreference = () => {
+          let preference = null;
+          try {
+            preference = localStorage.getItem(storageKey);
+          } catch {}
+          if (preference !== "light" && preference !== "dark") {
+            preference = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          }
+          return preference;
+        };
+
+        const setPreference = (themeName) => {
+          try {
+            localStorage.setItem(storageKey, themeName);
+          } catch {}
+          document.documentElement.setAttribute("data-theme", themeName);
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", themeColors[themeName]);
+        };
+
+        window.getColorPreference = getColorPreference;
+        window.setPreference = setPreference;
+        window.togglePreference = () => setPreference(getColorPreference() === "dark" ? "light" : "dark");
+
+        setPreference(getColorPreference());
+      })();
+    </script>
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   </head>
-  <body
-    class="bg-darkslate-700 md:h-screen flex flex-col justify-center items-center"
-  >
+  <body class="min-h-screen flex flex-col justify-center items-center">
     <slot name="loader" />
     <slot />
   </body>
@@ -91,7 +109,6 @@ import "../../src/styles/global.css";
   @font-face {
     font-family: "CabinetGrotesk";
     src: url("/fonts/CabinetGrotesk-Variable.ttf") format("truetype-variations");
-    font-weight: normal;
     font-style: normal;
     font-display: swap;
     font-weight: 100 1000;
@@ -99,7 +116,6 @@ import "../../src/styles/global.css";
   @font-face {
     font-family: "Satoshi";
     src: url("/fonts/Satoshi-Variable.ttf") format("truetype-variations");
-    font-weight: normal;
     font-style: normal;
     font-display: swap;
     font-weight: 100 1000;
@@ -107,7 +123,7 @@ import "../../src/styles/global.css";
 
   body {
     margin: 0;
-    font-family: "Satoshi", sans-serif;
+    font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     background-color: rgba(var(--background)) !important;
     color: rgba(var(--texts)) !important;
@@ -147,10 +163,7 @@ import "../../src/styles/global.css";
   h4,
   h5,
   h6 {
-    font-family: "Cabinet Grotesk", sans-serif;
-  }
-  p {
-    font-family: "Satoshi";
+    font-family: "CabinetGrotesk", "Satoshi", ui-sans-serif, system-ui, sans-serif;
   }
 
   b {

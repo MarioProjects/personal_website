@@ -2,103 +2,122 @@
 import Layout from "../layouts/Layout.astro";
 import Project from "../components/Project.astro";
 import { Icon } from "astro-icon/components";
+
+const projects = [
+  {
+    title: "Emojify",
+    description:
+      "Transform text into emojis. A practical end-to-end ML lifecycle: data collection, SFT & DPO training, evaluation, inference with llama.cpp, and observability (Prometheus, Grafana, LangSmith).",
+    url: "https://github.com/AIdventures/emojify",
+  },
+  {
+    title: "FLoRA",
+    description:
+      "The aim of this project is to provide a simple and easy-to-use implementation of LoRA for fine-tuning LLMs. To test the implementation, we tackle the MNLI subtask of the GLUE benchmark.",
+    url: "https://github.com/AIdventures/flora",
+  },
+  {
+    title: "microViT",
+    description:
+      "microViT is a streamlined implementation of the Vision Transformer (ViT) architecture, focusing solely on the encoder component. This project applies the microViT model to the classic task of handwritten digit classification using the MNIST dataset.",
+    url: "https://github.com/AIdventures/microViT",
+  },
+  {
+    title: "microTransformer",
+    description:
+      "microTransformer is based on the raw implementation of the Transformer model, with the encoder and decoder parts. The task we will be working on is the sorting of a sequence of characters. For example, the sequence 'ABCB' will be sorted as 'ABBC'.",
+    url: "https://github.com/AIdventures/microTransformer",
+  },
+  {
+    title: "DASeGAN",
+    description:
+      "Framework inspired in CycleGAN for domain adaptation and generalization using GANs to map images into a universal domain for segmentation tasks, unifying appearance across domains through adversarial training.",
+    url: "/DASeGAN.pdf",
+  },
+  {
+    title: "Dobble",
+    description:
+      "Through web scrapping techniques, it is possible to collect images of the works in the Prado museum. We have hundreds of algorithms to detect faces. We can obtain embeddings that encode our faces using Siamese neural networks. We just need to get the closest embedding!",
+    url: "https://dobble.maparla.es",
+  },
+  {
+    title: "Agro Analysis",
+    description:
+      "Analysis of the behavior of the Spanish fruit and vegetable market during the pandemic period with data from different sources. National competition obtaining the third place.",
+    url: "https://agro.maparla.es",
+  },
+];
 ---
 
 <script>
   import { stagger, spring, timeline, type TimelineDefinition } from "motion";
   import { loaderAnimation } from "../lib/constants";
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const cards = document.querySelectorAll(".card");
 
-  const sequence = [
-    loaderAnimation,
-    [
-      cards,
-      { y: ["40%", "0%"], opacity: [0, 1] },
-      {
-        at: "-0.1",
-        duration: 0.4,
-        delay: stagger(0.3),
-        easing: spring({ velocity: 100, stiffness: 50, damping: 10 }),
-      },
-    ],
-  ];
+  const sequence: TimelineDefinition = reduceMotion
+    ? [loaderAnimation as any]
+    : [
+        loaderAnimation as any,
+        [
+          cards,
+          { y: ["40%", "0%"], opacity: [0, 1] },
+          {
+            at: "-0.1",
+            duration: 0.4,
+            delay: stagger(0.1),
+            easing: spring({ velocity: 100, stiffness: 50, damping: 10 }),
+          },
+        ],
+      ];
 
-  timeline(sequence as TimelineDefinition);
+  timeline(sequence);
 
   const backToTopButton = document.getElementById("back-to-top");
 
   backToTopButton?.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
   });
 
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 300) {
-      backToTopButton?.classList.remove("hidden");
-    } else {
-      backToTopButton?.classList.add("hidden");
-    }
-  });
+  const syncBackToTop = () => {
+    const hide = window.scrollY <= 300;
+    backToTopButton?.classList.toggle("opacity-0", hide);
+    backToTopButton?.classList.toggle("translate-y-4", hide);
+    backToTopButton?.classList.toggle("pointer-events-none", hide);
+    backToTopButton?.setAttribute("aria-hidden", String(hide));
+  };
+
+  syncBackToTop();
+  window.addEventListener("scroll", syncBackToTop, { passive: true });
 </script>
 
 <Layout
   title="Mario Parreño - Projects"
-  description="I'm a Machine Learning engineer specializing in Computer Vision and Generative AI, automating problems that save companies time and money. Currently, I'm focused on tackling real-world problems with Deep Learning."
+  description="Side projects by Mario Parreño: LLM fine-tuning, Transformers from scratch, GANs for domain adaptation, computer vision demos and data analysis."
 >
-  <main
-    class="z-10 w-screen h-full flex flex-col justify-start items-start max-w-3xl mx-auto p-8"
-  >
+  <main class="relative z-10 mx-auto flex w-full max-w-3xl flex-col px-4 pb-12 pt-16 sm:px-8 sm:pt-20">
     <a
       href="/"
-      class="w-auto flex text-white bg-neutral-900 hover:bg-neutral-800 px-4 py-2 mb-8 border-1 border-solid border-neutral-600 rounded-lg"
-      >
-      <Icon size={22} name="mdi:arrow-back" class="h-6 mr-1" />
-      Back To Home
-      </a
+      class="mb-8 inline-flex w-fit items-center gap-2 rounded-lg border border-darkslate-100 bg-darkslate-500 px-4 py-2 text-sm shadow-md transition-colors duration-200 hover:border-primary-500 hover:text-primary-500"
     >
-    <h1 class="text-4xl font-bold mb-4">Personal Projects</h1>
-    <div class="flex flex-col gap-4 w-full space-y-2 pb-12">
-      <Project
-        title="Emojify"
-        description="Transform text into emojis. A practical end-to-end ML lifecycle: data collection, SFT & DPO training, evaluation, inference with llama.cpp, and observability (Prometheus, Grafana, LangSmith)."
-        url="https://github.com/AIdventures/emojify"
-      />
-      <Project
-        title="FLoRA"
-        description=" The aim of this project is to provide a simple and easy-to-use implementation of LoRA for fine-tuning LLMs. To test the implementation, we tackle the MNLI subtask of the GLUE benchmark."
-        url="https://github.com/AIdventures/flora"
-      />
-      <Project
-        title="microViT"
-        description="microViT is a streamlined implementation of the Vision Transformer (ViT) architecture, focusing solely on the encoder component. This project applies the microViT model to the classic task of handwritten digit classification using the MNIST dataset."
-        url="https://github.com/AIdventures/microViT"
-      />
-      <Project
-        title="microTransformer"
-        description="microTransformer is based on the raw implementation of the Transformer model, with the encoder and decoder parts. The task we will be working on is the sorting of a sequence of characters. For example, the sequence 'ABCB' will be sorted as 'ABBC'."
-        url="https://github.com/AIdventures/microTransformer"
-      />
-      <Project
-        title="DASeGAN"
-        description="Framework inspired in CycleGAN for domain adaptation and generalization using GANs to map images into a universal domain for segmentation tasks, unifying appearance across domains through adversarial training."
-        url="DASeGAN.pdf"
-      />
-      <Project
-        title="Dobble"
-        description="Through web scrapping techniques, it is possible to collect images of the works in the Prado museum. We have hundreds of algorithms to detect faces. We can obtain embeddings that encode our faces using Siamese neural networks. We just need to get the closest embedding!"
-        url="https://dobble.maparla.es"
-      />
-      <Project
-        title="Agro Analysis"
-        description="Analysis of the behavior of the Spanish fruit and vegetable market during the pandemic period with data from different sources. National competition obtaining the third place."
-        url="https://agro.maparla.es"
-      />
+      <Icon size={20} name="mdi:arrow-back" aria-hidden="true" />
+      Back to home
+    </a>
+    <h1 class="mb-2 text-3xl font-bold sm:text-4xl">Personal Projects</h1>
+    <p class="mb-8 max-w-prose text-sm text-muted sm:text-base">
+      Side projects and experiments, from fine-tuning LLMs and writing Transformers from scratch
+      to GANs and data analysis. Each card opens the code or the write-up.
+    </p>
+    <div class="flex w-full flex-col gap-4">
+      {projects.map((project) => <Project {...project} />)}
     </div>
     <button
       id="back-to-top"
-      class="fixed bottom-8 right-8 bg-neutral-900 text-white p-3 rounded-full shadow-lg hover:bg-neutral-800 transition-colors duration-200 z-50 hidden border border-neutral-600"
-      aria-label="Back to Top"
+      class="fixed bottom-6 right-4 sm:bottom-8 sm:right-8 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-darkslate-100 bg-darkslate-500 shadow-lg transform opacity-0 translate-y-4 pointer-events-none transition-all duration-200 hover:border-primary-500 hover:text-primary-500"
+      aria-label="Back to top"
     >
-      <Icon name="mdi:arrow-up" class="h-6 w-6" />
+      <Icon size={22} name="mdi:arrow-up" aria-hidden="true" />
     </button>
   </main>
 </Layout>

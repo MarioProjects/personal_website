@@ -7,25 +7,22 @@ import { Icon } from "astro-icon/components";
   import { timeline, type TimelineDefinition } from "motion";
   import { loaderAnimation } from "../lib/constants";
 
-  const sequence = [
-    loaderAnimation,
-  ];
-
-  timeline(sequence as TimelineDefinition);
+  timeline([loaderAnimation as any] as TimelineDefinition);
 </script>
 
 <Layout title="404 - Page Not Found" description="The page you are looking for does not exist.">
-  <main class="relative z-10 flex flex-col justify-center items-center h-screen w-screen text-center p-4">
-    <h1 class="text-9xl font-bold mb-4 text-primary-500">404</h1>
-    <h2 class="text-3xl font-bold mb-6">Page Not Found</h2>
-    <p class="text-xl mb-8 max-w-md">
-      Oops! The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+  <main class="relative z-10 flex min-h-screen w-full flex-col items-center justify-center p-4 text-center">
+    <h1 class="mb-4 text-8xl font-bold text-primary-500 sm:text-9xl">404</h1>
+    <h2 class="mb-6 text-3xl font-bold">Page Not Found</h2>
+    <p class="mb-8 max-w-md text-lg text-muted sm:text-xl">
+      Oops! The page you are looking for might have been removed, had its name changed, or is
+      temporarily unavailable.
     </p>
     <a
       href="/"
-      class="flex items-center gap-2 bg-primary-500 hover:opacity-90 text-white px-6 py-3 rounded-lg transition-all duration-200 border border-transparent shadow-lg hover:scale-105"
+      class="flex items-center gap-2 rounded-lg border border-transparent bg-primary-500 px-6 py-3 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:opacity-90"
     >
-      <Icon name="mdi:home" class="text-xl" />
+      <Icon name="mdi:home" class="text-xl" aria-hidden="true" />
       Back to Home
     </a>
   </main>

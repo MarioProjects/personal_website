@@ -1,44 +1,41 @@
 ---
-import { getCurrentTimeInMadrid, formatTimeForMadrid } from "../lib/helpers";
+import { formatTimeForMadrid, getMadridTimeZoneName } from "../lib/helpers";
 import Card from "./Card/index.astro";
+
+const now = new Date();
 ---
 
 <script>
-  import { onCleanup, onMount } from "solid-js";
-  import { formatTimeForMadrid } from "../lib/helpers";
+  import { formatTimeForMadrid, getMadridTimeZoneName } from "../lib/helpers";
 
-  let interval: ReturnType<typeof setInterval>;
+  const timeDisplay = document.getElementById("timeDisplay");
+  const zoneDisplay = document.getElementById("timeZoneName");
 
   function updateClock() {
-    const timeDisplay = document.getElementById("timeDisplay");
     const now = new Date();
-
     if (timeDisplay) {
       timeDisplay.textContent = formatTimeForMadrid(now);
       timeDisplay.setAttribute("datetime", now.toISOString());
     }
+    if (zoneDisplay) zoneDisplay.textContent = getMadridTimeZoneName(now);
   }
 
-  onMount(() => {
-    interval = setInterval(updateClock, 1000);
-  });
-
-  onCleanup(() => {
-    clearInterval(interval);
-  });
+  // Replace the build-time value straight away, then tick on the second boundary.
+  updateClock();
+  setTimeout(() => {
+    updateClock();
+    setInterval(updateClock, 1000);
+  }, 1000 - (Date.now() % 1000));
 </script>
 
-<Card colSpan="md:col-span-1" rowSpan="md:row-span-1" verticalPadding="p-3">
-  <div class="flex justify-between w-full items-start">
-    <div class="flex flex-col">
-      <h2>My Time Zone</h2>
-  <time
-    datetime=""
-    id="timeDisplay"
-    class="text-lg xl:text-xl xl:whitespace-nowrap w-50 xl:w-100 h-[calc(100%-28px)] font-serif flex"
-  >
-    {formatTimeForMadrid(getCurrentTimeInMadrid())}
-  </time>
-</div>
-</div>
+<Card colSpan="md:col-span-1" rowSpan="xl:row-span-1" padding="p-4 sm:px-6 sm:py-4">
+  <div class="flex h-full flex-col justify-center gap-1">
+    <h2 class="m-0 text-xs font-semibold uppercase tracking-wide text-muted">My Time Zone</h2>
+    <p class="m-0 flex flex-wrap items-baseline gap-x-2 text-lg font-semibold tracking-tight">
+      <time id="timeDisplay" datetime={now.toISOString()} class="tabular-nums">
+        {formatTimeForMadrid(now)}
+      </time>
+      <span id="timeZoneName" class="text-sm font-medium text-muted">{getMadridTimeZoneName(now)}</span>
+    </p>
+  </div>
 </Card>
